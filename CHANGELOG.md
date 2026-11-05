@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## Unreleased
 
+### Fixed
+
+- Fixed `pi install` (and other production installs with `--omit=dev`) failing when the `prepare` hook tried to run Husky, which is a dev-only dependency; hook setup is now skipped when dev dependencies are omitted or Husky is not installed.
+
 ## 0.14.4 - 2026-11-03
 
 ### Added
