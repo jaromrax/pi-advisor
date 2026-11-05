@@ -14,6 +14,22 @@ if (localPrefix && resolve(localPrefix) !== projectRoot) {
   process.exit(0);
 }
 
+// Consumer install (e.g. `pi install` runs `npm install --omit=dev`):
+// dist/ is prebuilt, Bun is not needed, so warn instead of failing.
+const omit = (process.env.npm_config_omit ?? "").split(/[,\s]+/u).filter(Boolean);
+const only = (process.env.npm_config_only ?? "").toLowerCase();
+if (
+  omit.includes("dev") ||
+  only === "prod" ||
+  only === "production" ||
+  process.env.npm_config_production === "true"
+) {
+  console.warn(
+    "Skipping Bun version check for production install (dev dependencies omitted)."
+  );
+  process.exit(0);
+}
+
 const packageJson = JSON.parse(
   readFileSync(resolve(projectRoot, "package.json"), "utf-8")
 );
